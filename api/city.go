@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 type Centre struct {
@@ -20,7 +21,12 @@ type City struct {
 }
 
 func FindCity(cityName string) City {
-	res, err := http.Get(fmt.Sprintf("https://geo.api.gouv.fr/communes?nom=%v&fields=nom,codesPostaux,codeDepartement,population,centre&format=json&geometry=centre", cityName))
+	res, err := http.Get(
+		fmt.Sprintf(
+			"https://geo.api.gouv.fr/communes?nom=%v&fields=nom,codesPostaux,codeDepartement,population,centre&format=json&geometry=centre",
+			url.QueryEscape(cityName),
+		),
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
