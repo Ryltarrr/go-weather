@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+	"go-weather/api"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -19,6 +21,14 @@ to quickly create a Cobra application.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+	Args: cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		city := api.FindCity(args[0])
+		weather := api.GetWeather(city.Centre.Coordinates)
+
+		fmt.Printf("Actually in %v, the weather is %v and temperature is %v°C (min: %v, max: %v)",
+			city.Nom, weather.Weather[0].Description, weather.Main.Temp, weather.Main.TempMin, weather.Main.TempMax)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -37,7 +47,4 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.go-weather.yaml)")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
