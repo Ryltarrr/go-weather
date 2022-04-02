@@ -1,9 +1,9 @@
 package main
 
 import (
-	"go-weather/cmd"
 	"log"
 
+	"github.com/Ryltarrr/go-weather/cmd"
 	"github.com/joho/godotenv"
 )
 

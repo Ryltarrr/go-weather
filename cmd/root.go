@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"go-weather/api"
 	"os"
 
+	"github.com/Ryltarrr/go-weather/api"
 	"github.com/spf13/cobra"
 )
 
@@ -12,8 +12,8 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "go-weather",
 	Short: "Simple weather CLI app",
-	Long: `go-weather is a simple CLI tool to get the weather of a french city`,
-	Args: cobra.ExactArgs(1),
+	Long:  `go-weather is a simple CLI tool to get the weather of a french city`,
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		city := api.FindCity(args[0])
 		weather := api.GetWeather(city.Centre.Coordinates)
