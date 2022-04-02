@@ -3,9 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
 	"net/url"
 )
 
@@ -21,23 +18,13 @@ type City struct {
 }
 
 func FindCity(cityName string) City {
-	res, err := http.Get(
+	body := Fetch(
 		fmt.Sprintf(
 			"https://geo.api.gouv.fr/communes?nom=%v&fields=nom,codesPostaux,codeDepartement,population,centre&format=json&geometry=centre",
 			url.QueryEscape(cityName),
 		),
 	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
-	if res.StatusCode > 299 {
-		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	var cities []City
 	if err := json.Unmarshal(body, &cities); err != nil {
 		panic(err)

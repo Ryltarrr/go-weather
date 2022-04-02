@@ -3,10 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
 	"math"
-	"net/http"
 	"os"
 )
 
@@ -38,18 +35,9 @@ func (wr *WeatherResponse) roundTemperatures() {
 func GetWeather(coordinates [2]float64) WeatherResponse {
 	apiKey := os.Getenv("OPENWEATHERMAP_API_KEY")
 
-	res, err := http.Get(fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lon=%v&lat=%v&appid=%v&units=metric", coordinates[0], coordinates[1], apiKey))
-	if err != nil {
-		log.Fatal(err)
-	}
-	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
-	if res.StatusCode > 299 {
-		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
+	body := Fetch(
+		fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lon=%v&lat=%v&appid=%v&units=metric", coordinates[0], coordinates[1], apiKey))
+
 	return decode(body)
 }
 
